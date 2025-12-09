@@ -1,0 +1,6 @@
+
+# python virtual environment directory
+venv/
+
+# emacs backup files
+*~
