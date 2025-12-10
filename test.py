@@ -22,6 +22,20 @@ landmark_1 Rijksmuseum
 landmark_2 Concertgebouw
 """
 
+SPARSE = (
+    "record one\n"
+    "key1 a value\n"
+    "key2 another value\n"
+    "\n\n\n"
+    "record two\n"
+    "key1 a value\n"
+    "key2 another value\n"
+    "\n\n\n\n\n\n"
+    "record three\n"
+    "key value\n"
+    "\n\n"
+)
+
 
 def test_number_of_records_in_books_fixture() -> None:
     record_dictionary = tr.string_to_record_dictionary(BOOKS)
@@ -49,6 +63,13 @@ def test_no_spaces_in_keys_record() -> None:
     assert record["landmark_1"] == "Rijksmuseum"
     assert "landmark_2" in record
     assert record["landmark_2"] == "Concertgebouw"
+
+
+def test_sparse() -> None:
+    record_dictionary = tr.string_to_record_dictionary(SPARSE)
+    assert list(record_dictionary.keys()) == [
+        "record one", "record two", "record three"
+    ]
 
 
 def test_empty_string() -> None:
