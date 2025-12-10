@@ -8,8 +8,8 @@ def stream_to_record_dictionary(
         stream: io.TextIOBase
 ) -> RecordDictionary:
     result: RecordDictionary = {}
+    read_record_name = True
     current_record_name = None
-    read_record_name = False
     while line := stream.readline():
         line = line.strip()
         if not line:
