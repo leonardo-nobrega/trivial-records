@@ -12,6 +12,16 @@ author Luciano Ramalho
 publisher O'Reilly
 """
 
+CITIES = """
+Barcelona
+landmark_1 Parc Guell
+landmark_2 Sagrada Familia
+
+Amsterdam
+landmark_1 Rijksmuseum
+landmark_2 Concertgebouw
+"""
+
 
 def test_number_of_records_in_books_fixture() -> None:
     record_dictionary = tr.string_to_record_dictionary(BOOKS)
@@ -28,6 +38,17 @@ def test_first_books_record() -> None:
     assert record["author2"] == "Timothy Lister"
     assert "publisher" in record
     assert record["publisher"] == "Addison Wesley"
+
+
+def test_no_spaces_in_keys_record() -> None:
+    # Remember to not use spaces in the record's keys.
+    record_dictionary = tr.string_to_record_dictionary(CITIES)
+    assert "Amsterdam" in record_dictionary
+    record = record_dictionary["Amsterdam"]
+    assert "landmark_1" in record
+    assert record["landmark_1"] == "Rijksmuseum"
+    assert "landmark_2" in record
+    assert record["landmark_2"] == "Concertgebouw"
 
 
 def test_empty_string() -> None:
