@@ -6,9 +6,7 @@ from typing import Generator
 RecordDictionary = dict[str, dict[str, str]]
 
 
-def stream_to_record_dictionary(
-        stream: io.TextIOBase
-) -> RecordDictionary:
+def stream_to_record_dictionary(stream: io.TextIOBase) -> RecordDictionary:
     result: RecordDictionary = {}
     read_record_name = True
     current_record_name = None
@@ -47,6 +45,5 @@ def record_dictionary_to_string_generator(
 
 
 def record_dictionary_to_string(record_dictionary: RecordDictionary) -> str:
-    return "".join(list(record_dictionary_to_string_generator(
-        record_dictionary
-    )))
+    generator = record_dictionary_to_string_generator(record_dictionary)
+    return "".join(list(generator))
