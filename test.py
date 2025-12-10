@@ -19,7 +19,7 @@ publisher O'Reilly
 
 @pytest.fixture()
 def record_dictionary() -> tr.RecordDictionary:
-    return tr.make_record_dictionary(io.StringIO(BOOKS))
+    return tr.stream_to_record_dictionary(io.StringIO(BOOKS))
 
 
 def test_number_of_records(
@@ -49,4 +49,4 @@ def test_second_record(record_dictionary: tr.RecordDictionary) -> None:
 
 
 def test_empty_string() -> None:
-    assert not tr.make_record_dictionary_from_string("")
+    assert not tr.string_to_record_dictionary("")

@@ -4,7 +4,7 @@ import io
 RecordDictionary = dict[str, dict[str, str]]
 
 
-def make_record_dictionary(
+def stream_to_record_dictionary(
         stream: io.TextIOBase
 ) -> RecordDictionary:
     result: RecordDictionary = {}
@@ -27,5 +27,5 @@ def make_record_dictionary(
     return result
 
 
-def make_record_dictionary_from_string(string: str) -> RecordDictionary:
-    return make_record_dictionary(io.StringIO(string))
+def string_to_record_dictionary(string: str) -> RecordDictionary:
+    return stream_to_record_dictionary(io.StringIO(string))
