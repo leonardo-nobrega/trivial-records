@@ -1,8 +1,4 @@
 
-import io
-
-import pytest
-
 import trivial_records as tr
 
 BOOKS = """
@@ -17,18 +13,13 @@ publisher O'Reilly
 """
 
 
-@pytest.fixture()
-def record_dictionary() -> tr.RecordDictionary:
-    return tr.stream_to_record_dictionary(io.StringIO(BOOKS))
-
-
-def test_number_of_records(
-        record_dictionary: tr.RecordDictionary
-) -> None:
+def test_number_of_records_in_books_fixture() -> None:
+    record_dictionary = tr.string_to_record_dictionary(BOOKS)
     assert len(record_dictionary) == 2
 
 
-def test_first_record(record_dictionary: tr.RecordDictionary) -> None:
+def test_first_record() -> None:
+    record_dictionary = tr.string_to_record_dictionary(BOOKS)
     assert "Peopleware" in record_dictionary
     record = record_dictionary["Peopleware"]
     assert "author1" in record
@@ -39,7 +30,8 @@ def test_first_record(record_dictionary: tr.RecordDictionary) -> None:
     assert record["publisher"] == "Addison Wesley"
 
 
-def test_second_record(record_dictionary: tr.RecordDictionary) -> None:
+def test_second_record() -> None:
+    record_dictionary = tr.string_to_record_dictionary(BOOKS)
     assert "CCNA 200-301" in record_dictionary
     record = record_dictionary["CCNA 200-301"]
     assert "author" in record
