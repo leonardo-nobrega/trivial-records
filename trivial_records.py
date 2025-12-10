@@ -1,6 +1,8 @@
 
 import io
 
+from typing import Generator
+
 RecordDictionary = dict[str, dict[str, str]]
 
 
@@ -29,3 +31,22 @@ def stream_to_record_dictionary(
 
 def string_to_record_dictionary(string: str) -> RecordDictionary:
     return stream_to_record_dictionary(io.StringIO(string))
+
+
+def record_dictionary_to_string_generator(
+        record_dictionary: RecordDictionary
+) -> Generator[str, None, None]:
+    separator = False
+    for record_name, record in record_dictionary.items():
+        if separator:
+            yield "\n"
+        separator = True
+        yield record_name + "\n"
+        for key, value in record.items():
+            yield key + " " + value + "\n"
+
+
+def record_dictionary_to_string(record_dictionary: RecordDictionary) -> str:
+    return "".join(list(record_dictionary_to_string_generator(
+        record_dictionary
+    )))

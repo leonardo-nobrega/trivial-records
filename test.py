@@ -50,3 +50,11 @@ def test_second_record(record_dictionary: tr.RecordDictionary) -> None:
 
 def test_empty_string() -> None:
     assert not tr.string_to_record_dictionary("")
+
+
+def test_encode_decode() -> None:
+    expected = {"one": {"a": "1", "b": "2"}, "two": {"c": "3"}}
+    actual = tr.string_to_record_dictionary(
+        tr.record_dictionary_to_string(expected)
+    )
+    assert expected == actual
