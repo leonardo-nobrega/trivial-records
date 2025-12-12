@@ -1,6 +1,14 @@
 
 name: publish package
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        name: deployment target
+        type: environment
+        default: testpypi
+        required: true
+
 jobs:
   build:
     name: build package
@@ -26,7 +34,7 @@ jobs:
     permissions:
       id-token: write
     environment:
-      name: testpypi
+      name: ${{ inputs.environment }}
     steps:
       - name: get distribution package
         uses: actions/download-artifact@v4
