@@ -41,8 +41,8 @@ jobs:
         with:
           name: release-dists
           path: dist/
-      - name: publish to testpypi
+      - name: publish to testpypi or pypi
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          repository-url: https://test.pypi.org/legacy/
+          repository-url: ${{ vars.PYPI_REPOSITORY_URL }}
           packages-dir: dist/
