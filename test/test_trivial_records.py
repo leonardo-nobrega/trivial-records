@@ -1,4 +1,5 @@
 
+import pytest
 import trivial_records as tr
 
 BOOKS = """
@@ -72,6 +73,11 @@ def test_sparse() -> None:
     ]
 
 
+def test_not_using_a_string() -> None:
+    with pytest.raises(ValueError):
+        tr.string_to_record_dictionary(None)
+
+
 def test_empty_string() -> None:
     assert not tr.string_to_record_dictionary("")
 
@@ -82,3 +88,13 @@ def test_encode_decode() -> None:
         tr.record_dictionary_to_string(expected)
     )
     assert expected == actual
+
+
+def test_invalid_record_dictionary() -> None:
+    with pytest.raises(ValueError):
+        tr.record_dictionary_to_string({True: "bad dict"})
+
+
+def test_invalid_record() -> None:
+    with pytest.raises(ValueError):
+        tr.record_dictionary_to_string({"obj": {123: "bad record"}})
