@@ -4,3 +4,7 @@ venv/
 
 # emacs backup files
 *~
+
+# distribution package directories
+dist/
+trivial_records.egg-info/
