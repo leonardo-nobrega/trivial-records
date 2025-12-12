@@ -1,7 +1,7 @@
 
 # Trivial Records
 
-A tiny library to parse text containing lists of records.
+A tiny library to parse and generate text containing lists of records.
 
 ## Why not just JSON?
 
