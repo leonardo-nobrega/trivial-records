@@ -6,6 +6,22 @@ from typing import Any, cast, Generator
 RecordDictionary = dict[str, dict[str, Any]]
 
 
+def stream_to_record(stream: io.TextIOBase) -> dict[str, Any]:
+    result = {}
+    while line := stream.readline():
+        line = line.strip()
+        if line:
+            key, value = line.split(maxsplit=1)
+            result[key] = value
+        else:
+            break
+    return result
+
+
+def string_to_record(string: str) -> dict[str, Any]:
+    return stream_to_record(io.StringIO(string))
+
+
 def stream_to_record_dictionary(obj: Any) -> RecordDictionary:
     if not isinstance(obj, io.TextIOBase):
         raise ValueError("not an io.TextIOBase stream")
@@ -15,20 +31,25 @@ def stream_to_record_dictionary(obj: Any) -> RecordDictionary:
     result: RecordDictionary = {}
     read_record_name = True
     current_record_name = None
-    while line := stream.readline():
-        line = line.strip()
-        if not line:
+    while True:
+        if read_record_name:
+            line = stream.readline()
+            if not line:
+                break
+            line = line.strip()
+
+            if line:
+                read_record_name = False
+                current_record_name = line
+            else:
+                read_record_name = True
+                current_record_name = None
+        else:
+            assert current_record_name is not None
+            result[current_record_name] = stream_to_record(stream)
             read_record_name = True
             current_record_name = None
-        else:
-            if read_record_name:
-                current_record_name = line
-                result[current_record_name] = {}
-                read_record_name = False
-            else:
-                key, value = line.split(maxsplit=1)
-                assert current_record_name is not None
-                result[current_record_name][key] = value
+
     return result
 
 
@@ -67,6 +88,19 @@ def validate_record_dictionary(obj: Any):
             raise ValueError("record's keys must be strings: {}".format(r))
 
 
+def record_to_string_generator(record: dict[str, str]) -> Generator[str, None, None]:
+    for key, value in record.items():
+        yield key + " " + str(value) + "\n"
+
+
+def generator_to_string(gen: Generator[str, None, None]) -> str:
+    return "".join(list(gen))
+
+
+def record_to_string(record: dict[str, Any]) -> str:
+    return generator_to_string(record_to_string_generator(record))
+
+
 def record_dictionary_to_string_generator(
         obj: Any
 ) -> Generator[str, None, None]:
@@ -79,10 +113,9 @@ def record_dictionary_to_string_generator(
             yield "\n"
         separator = True
         yield record_name + "\n"
-        for key, value in record.items():
-            yield key + " " + str(value) + "\n"
+        yield from record_to_string_generator(record)
 
 
 def record_dictionary_to_string(obj: Any) -> str:
     generator = record_dictionary_to_string_generator(obj)
-    return "".join(list(generator))
+    return generator_to_string(generator)

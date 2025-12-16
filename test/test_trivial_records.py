@@ -38,6 +38,14 @@ SPARSE = (
 )
 
 
+RECORD_OBJECT = {"key1": "a value", "key2": "another value"}
+
+RECORD_STRING = (
+    "key1 a value\n"
+    "key2 another value\n"
+)
+
+
 def test_number_of_records_in_books_fixture() -> None:
     record_dictionary = tr.string_to_record_dictionary(BOOKS)
     assert len(record_dictionary) == 2
@@ -98,3 +106,13 @@ def test_invalid_record_dictionary() -> None:
 def test_invalid_record() -> None:
     with pytest.raises(ValueError):
         tr.record_dictionary_to_string({"obj": {123: "bad record"}})
+
+
+def test_record_serialize_deserialize() -> None:
+    obj = tr.string_to_record(tr.record_to_string(RECORD_OBJECT))
+    assert RECORD_OBJECT == obj
+
+
+def test_deserialize_serialize() -> None:
+    string = tr.record_to_string(tr.string_to_record(RECORD_STRING))
+    assert RECORD_STRING == string
