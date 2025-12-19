@@ -116,6 +116,13 @@ def record_dictionary_to_string_generator(
         yield from record_to_string_generator(record)
 
 
-def record_dictionary_to_string(obj: Any) -> str:
+def record_dictionary_to_stream(obj: Any, stream: io.TextIOBase) -> None:
     generator = record_dictionary_to_string_generator(obj)
-    return generator_to_string(generator)
+    for string in generator:
+        stream.write(string)
+
+
+def record_dictionary_to_string(obj: Any) -> str:
+    stream = io.StringIO()
+    record_dictionary_to_stream(obj, stream)
+    return stream.getvalue()
